@@ -1,0 +1,791 @@
+/* ===========================================================================
+   CONVITE ENCANTADO — style.css
+   Inspiração: Princesa Aurora (A Bela Adormecida)
+   Organização:
+     1. Variáveis & reset
+     2. Tipografia base
+     3. Fundo animado (céu, estrelas, pétalas, brilhos)
+     4. Hero
+     5. Seções (título/base)
+     6. Vídeo
+     7. Foto
+     8. Mensagem
+     9. Contador regressivo
+    10. Informações (cartões)
+    11. Botões (mapa / whatsapp)
+    12. Rodapé
+    13. Animações
+    14. Responsividade
+    15. Acessibilidade / preferências
+   =========================================================================== */
+
+/* ------------------------------------------------------------------ */
+/* 1. Variáveis & reset                                                */
+/* ------------------------------------------------------------------ */
+:root {
+    /* Paleta — dourado, rosa e tons pastel */
+    --rosa-claro:   #fbe4ec;
+    --rosa:         #f6c9d9;
+    --rosa-forte:   #e79cb6;
+    --lilas:        #e9dcf3;
+    --creme:        #fff7ef;
+    --dourado:      #d9a441;
+    --dourado-claro:#f4d58a;
+    --dourado-luz:  #ffe9a8;
+    --texto:        #4a2c42;
+    --texto-suave:  #6f4a62;
+    --branco-quente:#fffdfb;
+
+    /* Fundos degradê */
+    --bg-topo:   #2a1b3d;   /* céu noturno arroxeado */
+    --bg-meio:   #6d4a7a;
+    --bg-base:   #f7dfe9;   /* aurora rosada */
+
+    /* Efeitos */
+    --sombra-suave: 0 10px 30px rgba(90, 40, 80, 0.18);
+    --sombra-card:  0 8px 24px rgba(90, 40, 80, 0.12);
+    --vidro:        rgba(255, 255, 255, 0.55);
+    --vidro-borda:  rgba(255, 255, 255, 0.75);
+
+    /* Tipografia */
+    --fonte-titulo: "Georgia", "Times New Roman", serif;
+    --fonte-texto:  "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--fonte-texto);
+    color: var(--texto);
+    line-height: 1.65;
+    /* Base clara e legível (aurora rosada). O clima noturno fica
+       restrito ao Hero, garantindo contraste em todas as seções. */
+    background: linear-gradient(180deg,
+                var(--creme) 0%,
+                var(--rosa-claro) 45%,
+                var(--lilas) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;              /* nunca rolagem horizontal */
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2. Tipografia base                                                  */
+/* ------------------------------------------------------------------ */
+h1, h2 {
+    font-family: var(--fonte-titulo);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.15;
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. Fundo animado                                                    */
+/* ------------------------------------------------------------------ */
+.sky {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Camada de estrelas do Hero (sobre o céu noturno próprio) */
+.hero__stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Estrelas — geradas via JS, cada uma pisca suavemente */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--dourado-luz);
+    border-radius: 50%;
+    opacity: 0.8;
+    box-shadow: 0 0 6px 1px rgba(244, 213, 138, 0.9);
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* Pétalas/flores caindo — geradas via JS */
+.petals .petal {
+    position: absolute;
+    top: -8vh;
+    font-size: var(--size, 16px);
+    opacity: 0;
+    animation: fall var(--dur, 14s) linear infinite;
+    animation-delay: var(--delay, 0s);
+    will-change: transform;
+}
+
+/* Brilhos radiais suaves (aurora) */
+.glow {
+    position: absolute;
+    width: 90vw;
+    max-width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+}
+.glow--top {
+    top: -140px;
+    left: -80px;
+    background: radial-gradient(circle, rgba(244, 213, 138, 0.55), transparent 70%);
+    animation: drift 12s ease-in-out infinite alternate;
+}
+.glow--bottom {
+    bottom: -160px;
+    right: -80px;
+    background: radial-gradient(circle, rgba(231, 156, 182, 0.55), transparent 70%);
+    animation: drift 14s ease-in-out infinite alternate-reverse;
+}
+
+/* ------------------------------------------------------------------ */
+/* 4. Hero                                                             */
+/* ------------------------------------------------------------------ */
+.hero {
+    /* Altura exata da tela (svh/dvh acompanham as barras do navegador móvel) */
+    min-height: 100vh;
+    min-height: 100svh;
+    height: 100svh;
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px 22px 20px;
+    position: relative;
+    overflow: hidden;
+    /* Fundo rosa do Hero — tom mais escuro para dar contraste ao texto */
+    background: linear-gradient(180deg,
+                #9c4468 0%,
+                #b25c82 55%,
+                #cf7a9c 100%);
+}
+/* Transição suave do Hero (escuro) para o corpo (claro) */
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+    background: linear-gradient(180deg, transparent, var(--creme));
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Área flexível que centraliza o quadro no espaço restante.
+   min-height:0 permite que encolha em telas baixas, sem gerar rolagem. */
+.hero__center {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero__frame {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+    width: 100%;
+    padding: 44px 26px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 233, 168, 0.35);
+    box-shadow: 0 0 40px rgba(255, 233, 168, 0.12),
+                inset 0 0 30px rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.hero__crown {
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 8px rgba(217, 164, 65, 0.6));
+    animation: floaty 4s ease-in-out infinite;
+}
+
+.hero__eyebrow {
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    color: var(--dourado-luz);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+}
+
+.hero__name {
+    font-size: clamp(3.2rem, 18vw, 6rem);
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(255, 233, 168, 0.6),
+                 0 0 6px rgba(255, 255, 255, 0.4);
+    background: linear-gradient(180deg, #fff 0%, var(--dourado-luz) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.hero__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--dourado-luz);
+    margin: 14px 0 18px;
+    font-size: 0.9rem;
+}
+.hero__divider span {
+    display: block;
+    width: 46px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dourado-luz));
+}
+.hero__divider span:last-child {
+    background: linear-gradient(90deg, var(--dourado-luz), transparent);
+}
+
+.hero__line1 {
+    color: #fff;
+    font-size: 1.08rem;
+    font-style: italic;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+.hero__line2 {
+    color: var(--rosa-claro);
+    font-size: 0.98rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Indicador de rolagem */
+.hero__scroll {
+    /* Item de fluxo no rodapé do Hero: reserva o próprio espaço,
+       por isso nunca sobrepõe o quadro e está sempre visível. */
+    position: relative;
+    z-index: 2;
+    flex: 0 0 auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    text-decoration: none;
+    animation: floaty 2.4s ease-in-out infinite;
+}
+.hero__scroll-text {
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--dourado-luz);
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+.hero__scroll-mouse {
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba(255, 233, 168, 0.8);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    padding-top: 7px;
+}
+.hero__scroll-dot {
+    width: 4px;
+    height: 8px;
+    background: var(--dourado-luz);
+    border-radius: 2px;
+    animation: scrollDot 1.6s ease-in-out infinite;
+}
+.hero__scroll-chevron {
+    color: var(--dourado-luz);
+    line-height: 0;
+    animation: chevronBounce 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
+}
+
+/* ------------------------------------------------------------------ */
+/* 5. Seções — base                                                    */
+/* ------------------------------------------------------------------ */
+.section {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 54px 22px;
+    text-align: center;
+}
+
+.section__title {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    color: var(--texto);
+    margin-bottom: 26px;
+    position: relative;
+    display: inline-block;
+}
+.section__title::after {
+    content: "❀";
+    display: block;
+    color: var(--dourado);
+    font-size: 0.7em;
+    margin-top: 8px;
+    opacity: 0.85;
+}
+
+.section__subtitle {
+    color: var(--texto-suave);
+    margin-bottom: 22px;
+    font-size: 1rem;
+}
+
+/* (Todas as seções agora ficam sobre fundo claro — texto escuro legível) */
+
+/* ------------------------------------------------------------------ */
+/* 6. Vídeo                                                            */
+/* ------------------------------------------------------------------ */
+.video__frame {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: var(--sombra-suave),
+                0 0 0 4px rgba(255, 233, 168, 0.35);
+    background: #1a1020;
+}
+.video__frame video {
+    display: block;
+    /* Nunca ultrapassa a largura nem a altura da tela.
+       Vídeos verticais são limitados pela altura; horizontais, pela largura. */
+    max-width: 100%;
+    max-height: 72vh;
+    width: auto;
+    height: auto;
+    border-radius: 22px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 7. Foto                                                             */
+/* ------------------------------------------------------------------ */
+.foto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.foto__frame {
+    position: relative;
+    padding: 12px;
+    border-radius: 200px 200px 24px 24px; /* arco de castelo */
+    background: linear-gradient(160deg, var(--dourado-luz), var(--dourado));
+    box-shadow: var(--sombra-suave);
+    max-width: 300px;
+    width: 78%;
+}
+.foto__frame::before {
+    /* Contorno interno delicado */
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 194px 194px 18px 18px;
+    pointer-events: none;
+    z-index: 2;
+}
+.foto__frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 190px 190px 14px 14px;
+    object-fit: cover;
+}
+.foto__caption {
+    margin-top: 18px;
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--texto);
+}
+
+/* ------------------------------------------------------------------ */
+/* 8. Mensagem                                                         */
+/* ------------------------------------------------------------------ */
+.card--glass {
+    background: var(--vidro);
+    border: 1px solid var(--vidro-borda);
+    box-shadow: var(--sombra-card);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 22px;
+}
+.mensagem {
+    position: relative;
+    padding: 34px 26px 30px;
+}
+.mensagem__quote {
+    position: absolute;
+    top: -6px;
+    left: 18px;
+    font-family: var(--fonte-titulo);
+    font-size: 3.4rem;
+    color: var(--dourado);
+    opacity: 0.5;
+    line-height: 1;
+}
+.mensagem p {
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    font-size: 1.12rem;
+    color: var(--texto);
+}
+
+/* ------------------------------------------------------------------ */
+/* 9. Contador regressivo                                              */
+/* ------------------------------------------------------------------ */
+.contador {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+.contador__item {
+    background: var(--vidro);
+    border: 1px solid var(--vidro-borda);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 16px 8px;
+    min-width: 68px;
+    flex: 1 1 0;
+    max-width: 84px;
+    box-shadow: var(--sombra-card);
+}
+.contador__num {
+    display: block;
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1;
+}
+.contador__label {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+}
+
+/* ------------------------------------------------------------------ */
+/* 10. Informações (cartões)                                          */
+/* ------------------------------------------------------------------ */
+.info__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+.info__card {
+    background: var(--branco-quente);
+    border: 1px solid rgba(217, 164, 65, 0.28);
+    border-radius: 18px;
+    padding: 20px 14px;
+    box-shadow: var(--sombra-card);
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.info__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(90, 40, 80, 0.18);
+}
+.info__card--wide {
+    grid-column: 1 / -1;
+}
+.info__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, var(--rosa-claro), var(--lilas));
+    color: var(--dourado);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 0 1px rgba(217, 164, 65, 0.35);
+}
+.info__label {
+    display: block;
+    font-size: 0.74rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin-bottom: 4px;
+}
+.info__value {
+    display: block;
+    font-family: var(--fonte-titulo);
+    font-size: 1.08rem;
+    color: var(--texto);
+    font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* 11. Botões                                                          */
+/* ------------------------------------------------------------------ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 30px;
+    border-radius: 40px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.btn__icon {
+    display: inline-flex;
+    align-items: center;
+}
+.btn:active {
+    transform: scale(0.96);
+}
+
+/* Brilho deslizante nos botões */
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.5s ease-in-out infinite;
+}
+
+.btn--map {
+    background: linear-gradient(135deg, var(--dourado-claro), var(--dourado));
+    color: #4a2f10;
+    box-shadow: 0 8px 22px rgba(217, 164, 65, 0.45);
+}
+.btn--map:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(217, 164, 65, 0.55);
+}
+
+.btn--whatsapp {
+    background: linear-gradient(135deg, #34d17a, #1faf5f);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(31, 175, 95, 0.45);
+    font-size: 1.15rem;
+    padding: 18px 34px;
+}
+.btn--whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(31, 175, 95, 0.55);
+}
+
+/* ------------------------------------------------------------------ */
+/* 12. Rodapé                                                          */
+/* ------------------------------------------------------------------ */
+.footer {
+    text-align: center;
+    padding: 40px 22px 54px;
+    color: var(--texto);
+}
+.footer__divider {
+    color: var(--dourado);
+    letter-spacing: 4px;
+    margin-bottom: 18px;
+    opacity: 0.8;
+}
+.footer__text {
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+}
+.footer__name {
+    font-family: var(--fonte-titulo);
+    font-size: 1.6rem;
+    color: var(--texto);
+}
+.footer__year {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    letter-spacing: 1px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 13. Animações                                                       */
+/* ------------------------------------------------------------------ */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%      { opacity: 1;   transform: scale(1.3); }
+}
+
+@keyframes fall {
+    0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.9; }
+    100% { transform: translateX(40px) translateY(112vh) rotate(320deg); opacity: 0; }
+}
+
+@keyframes drift {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(30px, 24px); }
+}
+
+@keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+@keyframes scrollDot {
+    0%   { transform: translateY(0);   opacity: 1; }
+    100% { transform: translateY(12px); opacity: 0; }
+}
+
+@keyframes chevronBounce {
+    0%, 100% { transform: translateY(0);   opacity: 0.7; }
+    50%      { transform: translateY(6px); opacity: 1; }
+}
+
+@keyframes shine {
+    0%, 60%, 100% { left: -120%; }
+    80%           { left: 130%; }
+}
+
+/* Revelação ao rolar (JS adiciona .is-visible) */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* O hero aparece imediatamente ao carregar */
+.hero.reveal { opacity: 1; transform: none; }
+.hero .reveal { animation: heroIn 1.2s ease both; }
+@keyframes heroIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ------------------------------------------------------------------ */
+/* 14. Responsividade                                                 */
+/* ------------------------------------------------------------------ */
+/* Telas muito estreitas (320px) */
+@media (max-width: 340px) {
+    .contador__item { min-width: 0; padding: 12px 4px; }
+    .contador { gap: 6px; }
+    .section { padding: 46px 16px; }
+}
+
+/* Tablets e desktop */
+@media (min-width: 768px) {
+    .info__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .info__card--wide {
+        grid-column: span 3;
+    }
+    .section {
+        padding: 70px 22px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section { max-width: 680px; }
+    .hero__frame { padding: 56px 40px; }
+}
+
+/* Alturas reduzidas (telas pequenas / paisagem):
+   compacta o quadro para caber por inteiro na tela, mantendo
+   SEMPRE visível o texto e a animação de rolagem. */
+@media (max-height: 740px) {
+    .hero { padding-top: 16px; padding-bottom: 14px; }
+    .hero__frame { padding: 22px 20px; }
+    .hero__crown { margin-bottom: 4px; }
+    .hero__crown svg { width: 52px; height: 33px; }
+    .hero__name { font-size: clamp(2.6rem, 15vw, 4.4rem); }
+    .hero__divider { margin: 8px 0 10px; }
+    .hero__line1 { font-size: 1rem; }
+    .hero__line2 { font-size: 0.9rem; }
+    /* Indicador mais enxuto (sem o "mouse"), porém texto + chevron continuam. */
+    .hero__scroll { gap: 4px; margin-top: 6px; }
+    .hero__scroll-mouse { display: none; }
+}
+
+@media (max-height: 560px) {
+    .hero__frame {
+        padding: 12px 18px;
+        background: rgba(255, 255, 255, 0.06);
+    }
+    .hero__crown { display: none; }
+    .hero__eyebrow { font-size: 0.72rem; letter-spacing: 2px; margin-bottom: 2px; }
+    .hero__name { font-size: clamp(1.9rem, 11vh, 3rem); margin-bottom: 2px; }
+    .hero__divider { margin: 4px 0 6px; }
+    .hero__line1 { font-size: 0.88rem; margin-bottom: 3px; }
+    .hero__line2 { font-size: 0.8rem; }
+    .hero__scroll-text { font-size: 0.8rem; }
+    .hero__scroll-chevron svg { width: 18px; height: 18px; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 15. Acessibilidade / preferências                                  */
+/* ------------------------------------------------------------------ */
+/* Foco visível para navegação por teclado */
+a:focus-visible,
+button:focus-visible,
+video:focus-visible {
+    outline: 3px solid var(--dourado-luz);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* Reduz movimento para quem prefere */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+}

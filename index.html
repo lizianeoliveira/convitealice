@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6c9d9" />
+    <meta name="description"
+          content="Convite digital de aniversário — um dia de magia inspirado na Princesa Aurora." />
+    <title>Convite Encantado</title>
+
+    <!-- Estilos (sem CSS inline no HTML) -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <!-- ===================================================================
+         Fundos decorativos (estrelas, brilhos e pétalas) — puro CSS/JS
+         =================================================================== -->
+    <div class="sky" aria-hidden="true">
+        <div class="stars" id="stars"></div>
+        <div class="petals" id="petals"></div>
+        <div class="glow glow--top"></div>
+        <div class="glow glow--bottom"></div>
+    </div>
+
+    <!-- ===================================================================
+         HERO — capa de abertura
+         =================================================================== -->
+    <header class="hero" id="hero">
+        <div class="hero__stars" id="heroStars" aria-hidden="true"></div>
+        <div class="hero__center">
+        <div class="hero__frame reveal">
+            <div class="hero__crown" aria-hidden="true">
+                <!-- Coroa em SVG inline -->
+                <svg viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="Coroa">
+                    <path d="M4 36 L8 12 L22 26 L32 6 L42 26 L56 12 L60 36 Z"
+                          fill="url(#goldGrad)" stroke="#b8860b" stroke-width="1.2"/>
+                    <circle cx="8" cy="12" r="3.2" fill="#fff4d6"/>
+                    <circle cx="32" cy="6" r="3.6" fill="#fff4d6"/>
+                    <circle cx="56" cy="12" r="3.2" fill="#fff4d6"/>
+                    <rect x="4" y="34" width="56" height="4" rx="2" fill="url(#goldGrad)"/>
+                    <defs>
+                        <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#ffe9a8"/>
+                            <stop offset="0.5" stop-color="#f4c65b"/>
+                            <stop offset="1" stop-color="#d9a441"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <p class="hero__eyebrow">Princesa</p>
+            <h1 class="hero__name" id="heroNome">Alice</h1>
+            <div class="hero__divider" aria-hidden="true">
+                <span></span>❀<span></span>
+            </div>
+            <p class="hero__line1" id="heroFrase1">Você foi escolhido para viver um dia de magia.</p>
+            <p class="hero__line2" id="heroFrase2">A princesa Alice vai completar 7 anos.</p>
+        </div>
+        </div>
+
+        <a class="hero__scroll" href="#video" aria-label="Rolar para ver o convite completo">
+            <span class="hero__scroll-text">Role para começar a magia</span>
+            <span class="hero__scroll-mouse">
+                <span class="hero__scroll-dot"></span>
+            </span>
+            <span class="hero__scroll-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22">
+                    <path fill="none" stroke="currentColor" stroke-width="2.4"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          d="M6 9l6 6 6-6"/>
+                </svg>
+            </span>
+        </a>
+    </header>
+
+    <main>
+        <!-- ===============================================================
+             VÍDEO
+             =============================================================== -->
+        <section class="section section--video reveal" id="video" aria-labelledby="videoTitulo">
+            <h2 class="section__title" id="videoTitulo">Um convite mágico</h2>
+            <div class="video__frame">
+                <video id="videoPlayer" controls preload="auto" playsinline
+                       aria-label="Vídeo convite da Alice">
+                    Seu navegador não suporta a reprodução de vídeo.
+                </video>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             FOTO
+             =============================================================== -->
+        <section class="section section--foto reveal" aria-labelledby="fotoTitulo">
+            <h2 class="section__title" id="fotoTitulo">A aniversariante</h2>
+            <figure class="foto">
+                <div class="foto__frame">
+                    <img id="fotoAlice" src="" alt="" />
+                </div>
+                <figcaption class="foto__caption" id="fotoLegenda">Alice</figcaption>
+            </figure>
+        </section>
+
+        <!-- ===============================================================
+             MENSAGEM
+             =============================================================== -->
+        <section class="section section--mensagem reveal" aria-labelledby="msgTitulo">
+            <h2 class="section__title" id="msgTitulo">Era uma vez…</h2>
+            <div class="mensagem card--glass">
+                <span class="mensagem__quote" aria-hidden="true">❝</span>
+                <p id="mensagemTexto"></p>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             CONTADOR REGRESSIVO
+             =============================================================== -->
+        <section class="section section--contador reveal" aria-labelledby="contadorTitulo">
+            <h2 class="section__title" id="contadorTitulo">A magia começa em</h2>
+            <div class="contador" id="contador" role="timer" aria-live="polite">
+                <div class="contador__item">
+                    <span class="contador__num" id="cDias">00</span>
+                    <span class="contador__label">Dias</span>
+                </div>
+                <div class="contador__item">
+                    <span class="contador__num" id="cHoras">00</span>
+                    <span class="contador__label">Horas</span>
+                </div>
+                <div class="contador__item">
+                    <span class="contador__num" id="cMin">00</span>
+                    <span class="contador__label">Min</span>
+                </div>
+                <div class="contador__item">
+                    <span class="contador__num" id="cSeg">00</span>
+                    <span class="contador__label">Seg</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             INFORMAÇÕES DO EVENTO
+             =============================================================== -->
+        <section class="section section--info reveal" aria-labelledby="infoTitulo">
+            <h2 class="section__title" id="infoTitulo">Detalhes da festa</h2>
+            <div class="info__grid" id="infoGrid">
+                <!-- Cartões inseridos via JavaScript -->
+            </div>
+        </section>
+
+        <!-- ===============================================================
+             MAPA
+             =============================================================== -->
+        <section class="section section--mapa reveal" aria-labelledby="mapaTitulo">
+            <h2 class="section__title" id="mapaTitulo">O caminho do castelo</h2>
+            <p class="section__subtitle" id="mapaEndereco"></p>
+            <a class="btn btn--map" id="btnMapa" href="#" target="_blank" rel="noopener">
+                <span class="btn__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
+                    </svg>
+                </span>
+                Como chegar
+            </a>
+        </section>
+
+        <!-- ===============================================================
+             CONFIRMAÇÃO — WHATSAPP
+             =============================================================== -->
+        <section class="section section--rsvp reveal" aria-labelledby="rsvpTitulo">
+            <h2 class="section__title" id="rsvpTitulo">Confirme sua presença</h2>
+            <p class="section__subtitle">Sua presença tornará este dia ainda mais especial.</p>
+            <a class="btn btn--whatsapp" id="btnWhatsapp" href="#" target="_blank" rel="noopener">
+                <span class="btn__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path fill="currentColor" d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2zm5.8 14.06c-.24.68-1.2 1.28-1.97 1.44-.53.11-1.22.2-3.56-.76-2.99-1.24-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.76-2.18 1.03-2.48.27-.3.59-.37.79-.37.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.6.83 2.06.9 2.21.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.37 1.46.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.72.81 2.01.96.3.15.5.22.57.35.07.12.07.72-.17 1.4z"/>
+                    </svg>
+                </span>
+                Confirmar presença
+            </a>
+        </section>
+    </main>
+
+    <!-- ===================================================================
+         RODAPÉ
+         =================================================================== -->
+    <footer class="footer reveal">
+        <div class="footer__divider" aria-hidden="true">✦ · ✦ · ✦</div>
+        <p class="footer__text">Com carinho, esperamos por você no reino encantado.</p>
+        <p class="footer__name" id="footerNome">Alice</p>
+        <p class="footer__year" id="footerAno"></p>
+    </footer>
+
+    <!-- Scripts: config primeiro, depois a lógica -->
+    <script src="config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
