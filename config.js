@@ -19,7 +19,7 @@ const CONFIG = {
     data: "20 de Agosto de 2026",
     hora: "18:30",
     // Data/hora em formato ISO para cálculos (contador regressivo):
-    dataISO: "2026-08-15T17:00:00",
+    dataISO: "2026-08-20T18:30:00",
 
     // Local do evento
     local: "Picuí Pizzas",
